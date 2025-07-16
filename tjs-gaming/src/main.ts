@@ -1,24 +1,50 @@
-import './style.css'
-import typescriptLogo from './typescript.svg'
-import viteLogo from '/vite.svg'
-import { setupCounter } from './counter.ts'
+import type Game from './game/abstract-game';
+import InputHandler from './game/input-handler';
+import { SnakeGame } from './game/snake/snake-game';
 
-document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
-  <div>
-    <a href="https://vite.dev" target="_blank">
-      <img src="${viteLogo}" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://www.typescriptlang.org/" target="_blank">
-      <img src="${typescriptLogo}" class="logo vanilla" alt="TypeScript logo" />
-    </a>
-    <h1>Vite + TypeScript</h1>
-    <div class="card">
-      <button id="counter" type="button"></button>
-    </div>
-    <p class="read-the-docs">
-      Click on the Vite and TypeScript logos to learn more
-    </p>
-  </div>
-`
+class Main {
+  game: Game;
+  input: InputHandler;
+  canvas: HTMLCanvasElement;
 
-setupCounter(document.querySelector<HTMLButtonElement>('#counter')!)
+  
+
+  constructor(game: Game, input: InputHandler, canvas: HTMLCanvasElement) {
+    this.game = game;
+    this.input = input;
+    this.canvas = canvas;
+  }
+
+  selectGame = (game: Game) => {
+    this.game = game;
+    this.startGame();
+  }
+
+  startGame = () => {
+    this.game.animate();
+  };
+
+  drawMenuScreen = (ctx: CanvasRenderingContext2D) => {
+    const {x, y} = this.game.boardSize();
+    ctx.clearRect(0, 0, x.max, y.max);
+
+
+  }
+}
+
+var main;
+
+window.addEventListener('load', () => {
+  const canvas = document.getElementById('gameCanvas') as HTMLCanvasElement;
+
+  if (!canvas) return;
+
+  canvas.width = 500;
+  canvas.height = 540;
+
+  const input = new InputHandler();
+  const game = new SnakeGame(500, 500, 40, canvas, input);
+  main = new Main(game, input, canvas);
+
+  main.startGame();
+});
