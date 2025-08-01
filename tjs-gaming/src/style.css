@@ -5,9 +5,8 @@
 }
 
 #gameCanvas {
-  border: 5px solid turquoise;
+  border: 5px solid rgb(0, 255, 21);
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  top: 0;
+  left: 0;
 }
